@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a1022" />
+    <meta
+      name="description"
+      content="Traceback is a daily visual memory game from BitSync Games."
+    />
+    <title>Traceback — BitSync Games</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+    <header>
+      <a class="brand" href="../../">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span>BitSync <b>Games</b></span>
+      </a>
+      <button class="icon-button" id="help-button" aria-label="How to play">?</button>
+    </header>
+
+    <main>
+      <section class="intro">
+        <p class="eyebrow">Daily visual memory</p>
+        <h1>TRACE<span>BACK</span></h1>
+        <p class="dek">Watch the signal. Remember its path. Trace it back.</p>
+      </section>
+
+      <section class="game-shell" aria-labelledby="status">
+        <div class="game-topline">
+          <div>
+            <span class="label">Puzzle</span>
+            <strong id="puzzle-number">#000</strong>
+          </div>
+          <div>
+            <span class="label">Round</span>
+            <strong><span id="round">1</span>/3</strong>
+          </div>
+          <div>
+            <span class="label">Lives</span>
+            <strong id="lives" aria-label="3 lives">● ● ●</strong>
+          </div>
+        </div>
+
+        <div class="status-wrap">
+          <p id="status" aria-live="polite">Ready to trace today’s signal?</p>
+          <div class="progress" aria-hidden="true"><span id="progress"></span></div>
+        </div>
+
+        <div class="grid" id="grid" aria-label="Traceback game grid"></div>
+
+        <div class="controls">
+          <button class="primary" id="start-button">Start today’s game</button>
+          <p>Tap the squares in the order they flashed.</p>
+        </div>
+      </section>
+
+      <section class="stats" aria-label="Your Traceback statistics">
+        <div><strong id="played">0</strong><span>Played</span></div>
+        <div><strong id="win-rate">0%</strong><span>Win rate</span></div>
+        <div><strong id="streak">0</strong><span>Streak</span></div>
+        <div><strong id="best">0</strong><span>Best</span></div>
+      </section>
+    </main>
+
+    <dialog id="help-dialog">
+      <button class="dialog-close" data-close aria-label="Close">×</button>
+      <p class="eyebrow">How to play</p>
+      <h2>Trace the signal.</h2>
+      <ol>
+        <li>Watch each square light up.</li>
+        <li>Tap the same squares in the same order.</li>
+        <li>Clear three paths before losing all three lives.</li>
+      </ol>
+      <p>A new deterministic puzzle arrives every day.</p>
+      <button class="primary" data-close>Got it</button>
+    </dialog>
+
+    <dialog id="result-dialog">
+      <p class="eyebrow">Today’s result</p>
+      <h2 id="result-title">Signal restored.</h2>
+      <p id="result-copy"></p>
+      <pre id="share-result"></pre>
+      <button class="primary" id="share-button">Share result</button>
+      <button class="secondary" data-close>Close</button>
+    </dialog>
+
+    <script src="script.js"></script>
+  </body>
+</html>
