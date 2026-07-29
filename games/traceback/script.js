@@ -171,6 +171,7 @@ function setMenuOpen(open) {
   gamesMenu.classList.toggle("is-open", open);
   menuBackdrop.classList.toggle("is-open", open);
   gamesMenu.setAttribute("aria-hidden", String(!open));
+  gamesMenu.toggleAttribute("inert", !open);
   menuButton.setAttribute("aria-expanded", String(open));
   document.body.classList.toggle("menu-open", open);
   if (open) {
