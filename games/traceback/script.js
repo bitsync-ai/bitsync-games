@@ -1,0 +1,198 @@
+const EPOCH = Date.UTC(2026, 0, 1);
+const DAY = 86400000;
+const today = new Date();
+const utcToday = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate());
+const puzzleNumber = Math.floor((utcToday - EPOCH) / DAY) + 1;
+const dayKey = new Date(utcToday).toISOString().slice(0, 10);
+const lengths = [4, 6, 8];
+
+const grid = document.getElementById("grid");
+const startButton = document.getElementById("start-button");
+const statusText = document.getElementById("status");
+const roundText = document.getElementById("round");
+const livesText = document.getElementById("lives");
+const progress = document.getElementById("progress");
+const resultDialog = document.getElementById("result-dialog");
+const helpDialog = document.getElementById("help-dialog");
+
+let round = 0;
+let lives = 3;
+let position = 0;
+let accepting = false;
+let paths = [];
+let roundMarks = [];
+
+function seededRandom(seed) {
+  let state = seed >>> 0;
+  return () => {
+    state = (state * 1664525 + 1013904223) >>> 0;
+    return state / 4294967296;
+  };
+}
+
+function buildPaths() {
+  const random = seededRandom(puzzleNumber * 7919);
+  return lengths.map((length) => {
+    const path = [];
+    while (path.length < length) {
+      const next = Math.floor(random() * 16);
+      if (next !== path.at(-1)) path.push(next);
+    }
+    return path;
+  });
+}
+
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function showPath() {
+  accepting = false;
+  startButton.hidden = true;
+  statusText.textContent = "Watch the signal…";
+  progress.style.width = "0";
+  await wait(500);
+  const path = paths[round];
+  for (let index = 0; index < path.length; index += 1) {
+    const cell = grid.children[path[index]];
+    cell.classList.add("flash");
+    progress.style.width = `${((index + 1) / path.length) * 100}%`;
+    await wait(460);
+    cell.classList.remove("flash");
+    await wait(130);
+  }
+  position = 0;
+  progress.style.width = "0";
+  statusText.textContent = "Your turn. Trace it back.";
+  accepting = true;
+}
+
+async function chooseCell(index) {
+  if (!accepting) return;
+  const expected = paths[round][position];
+  const cell = grid.children[index];
+  if (index === expected) {
+    cell.classList.add("correct");
+    setTimeout(() => cell.classList.remove("correct"), 180);
+    position += 1;
+    progress.style.width = `${(position / paths[round].length) * 100}%`;
+    if (position === paths[round].length) {
+      accepting = false;
+      roundMarks.push("🟩");
+      if (round === 2) {
+        finish(true);
+      } else {
+        statusText.textContent = "Path restored.";
+        round += 1;
+        roundText.textContent = round + 1;
+        await wait(850);
+        showPath();
+      }
+    }
+  } else {
+    accepting = false;
+    lives -= 1;
+    livesText.textContent = `${"● ".repeat(lives)}${"○ ".repeat(3 - lives)}`.trim();
+    livesText.setAttribute("aria-label", `${lives} lives`);
+    cell.classList.add("wrong");
+    await wait(350);
+    cell.classList.remove("wrong");
+    if (lives === 0) {
+      roundMarks.push("🟥");
+      finish(false);
+    } else {
+      roundMarks.push("🟨");
+      statusText.textContent = "Signal lost. Watch again.";
+      await wait(700);
+      showPath();
+    }
+  }
+}
+
+function loadStats() {
+  return JSON.parse(localStorage.getItem("traceback:stats") || '{"played":0,"wins":0,"streak":0,"best":0}');
+}
+
+function renderStats(stats = loadStats()) {
+  document.getElementById("played").textContent = stats.played;
+  document.getElementById("win-rate").textContent = stats.played ? `${Math.round((stats.wins / stats.played) * 100)}%` : "0%";
+  document.getElementById("streak").textContent = stats.streak;
+  document.getElementById("best").textContent = stats.best;
+}
+
+function finish(won) {
+  accepting = false;
+  const stats = loadStats();
+  const previous = localStorage.getItem("traceback:last-played");
+  if (previous !== dayKey) {
+    stats.played += 1;
+    if (won) {
+      stats.wins += 1;
+      const yesterday = new Date(utcToday - DAY).toISOString().slice(0, 10);
+      stats.streak = previous === yesterday ? stats.streak + 1 : 1;
+      stats.best = Math.max(stats.best, stats.streak);
+    } else {
+      stats.streak = 0;
+    }
+    localStorage.setItem("traceback:stats", JSON.stringify(stats));
+    localStorage.setItem("traceback:last-played", dayKey);
+    localStorage.setItem("traceback:result", JSON.stringify({ won, lives, marks: roundMarks }));
+  }
+  renderStats(stats);
+  showResult(won);
+}
+
+function showResult(won) {
+  document.getElementById("result-title").textContent = won ? "Signal restored." : "Signal lost.";
+  document.getElementById("result-copy").textContent = won
+    ? `You cleared all three paths with ${lives} ${lives === 1 ? "life" : "lives"} remaining.`
+    : "Today’s path got away. A new signal arrives tomorrow.";
+  document.getElementById("share-result").textContent =
+    `Traceback #${puzzleNumber} ${won ? `${lives}/3` : "X/3"}\n${roundMarks.join("")}\nhttps://bitsync-ai.github.io/bitsync-games/games/traceback/`;
+  resultDialog.showModal();
+}
+
+function startGame() {
+  round = 0;
+  lives = 3;
+  position = 0;
+  roundMarks = [];
+  paths = buildPaths();
+  roundText.textContent = "1";
+  livesText.textContent = "● ● ●";
+  showPath();
+}
+
+for (let index = 0; index < 16; index += 1) {
+  const button = document.createElement("button");
+  button.className = "cell";
+  button.type = "button";
+  button.setAttribute("aria-label", `Grid square ${index + 1}`);
+  button.addEventListener("click", () => chooseCell(index));
+  grid.appendChild(button);
+}
+
+document.getElementById("puzzle-number").textContent = `#${String(puzzleNumber).padStart(3, "0")}`;
+document.getElementById("help-button").addEventListener("click", () => helpDialog.showModal());
+document.querySelectorAll("[data-close]").forEach((button) => button.addEventListener("click", () => button.closest("dialog").close()));
+document.getElementById("share-button").addEventListener("click", async () => {
+  const text = document.getElementById("share-result").textContent;
+  if (navigator.share) {
+    await navigator.share({ text });
+  } else {
+    await navigator.clipboard.writeText(text);
+    document.getElementById("share-button").textContent = "Copied";
+  }
+});
+const savedDate = localStorage.getItem("traceback:last-played");
+const savedResult = localStorage.getItem("traceback:result");
+if (savedDate === dayKey && savedResult) {
+  const result = JSON.parse(savedResult);
+  roundMarks = result.marks;
+  lives = result.lives;
+  startButton.textContent = "View today’s result";
+  startButton.addEventListener("click", () => showResult(result.won));
+} else {
+  startButton.addEventListener("click", startGame);
+}
+renderStats();
