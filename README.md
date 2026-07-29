@@ -5,7 +5,7 @@ A single home and monorepo for quick browser games from BitSync.
 ## Games
 
 - [`games/pixel-slugger`](games/pixel-slugger) — a one-button baseball timing game
-- **Traceback** — a daily visual memory game, coming soon
+- [`games/traceback`](games/traceback) — a daily visual memory game
 
 ## Run locally
 

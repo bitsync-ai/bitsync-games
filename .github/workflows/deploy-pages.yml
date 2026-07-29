@@ -40,9 +40,10 @@ jobs:
 
       - name: Assemble site
         run: |
-          mkdir -p _site/games/pixel-slugger
+          mkdir -p _site/games/pixel-slugger _site/games/traceback
           cp index.html styles.css script.js .nojekyll _site/
           cp -R games/pixel-slugger/out/. _site/games/pixel-slugger/
+          cp -R games/traceback/. _site/games/traceback/
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
