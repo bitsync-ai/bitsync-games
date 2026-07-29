@@ -538,6 +538,7 @@ export default function Home() {
         className={`games-menu ${menuOpen ? "is-open" : ""}`}
         id="games-menu"
         aria-hidden={!menuOpen}
+        inert={!menuOpen}
         aria-label="BitSync Games menu"
       >
         <div className="menu-top">
