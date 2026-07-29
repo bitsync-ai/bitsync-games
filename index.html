@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Quick, original browser games from BitSync Games."
+    />
+    <meta name="theme-color" content="#0a1022" />
+    <title>BitSync Games — Quick games for curious minds</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="BitSync Games home">
+        <span class="brand-mark" aria-hidden="true">
+          <i></i><i></i><i></i><i></i>
+        </span>
+        <span>BitSync <b>Games</b></span>
+      </a>
+
+      <nav aria-label="Primary navigation">
+        <a href="#games">Games</a>
+        <a href="#about">About</a>
+      </nav>
+
+      <a class="header-cta" href="#games">Play now <span>↘</span></a>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">
+            <span class="live-dot"></span>
+            Quick games for curious minds
+          </p>
+          <h1>A tiny break.<br /><em>A fresh challenge.</em></h1>
+          <p class="hero-description">
+            Original browser games that are easy to learn, satisfying to
+            master, and over before your coffee gets cold.
+          </p>
+          <a class="primary-button" href="#games">
+            Browse the arcade
+            <span class="button-icon">↓</span>
+          </a>
+        </div>
+
+        <div class="hero-art" aria-label="Abstract pixel arcade illustration">
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="pixel-spark spark-one"></div>
+          <div class="pixel-spark spark-two"></div>
+          <div class="pixel-spark spark-three"></div>
+          <div class="arcade-screen">
+            <div class="screen-top">
+              <span>DAILY RUN</span>
+              <span class="screen-score">00420</span>
+            </div>
+            <div class="screen-grid" aria-hidden="true">
+              <span></span><span></span><span class="active"></span><span></span>
+              <span></span><span class="trail"></span><span class="active"></span><span></span>
+              <span></span><span class="trail"></span><span class="trail"></span><span></span>
+              <span></span><span></span><span class="cursor"></span><span></span>
+            </div>
+            <p>REMEMBER THE PATH</p>
+          </div>
+          <div class="hero-label label-left">PLAY</div>
+          <div class="hero-label label-right">REPEAT</div>
+        </div>
+      </section>
+
+      <section class="games-section" id="games">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Choose your game</p>
+            <h2>Today’s arcade</h2>
+          </div>
+          <p class="section-note">Short sessions. No downloads. Just play.</p>
+        </div>
+
+        <div class="game-grid">
+          <article class="game-card slugger-card">
+            <div class="card-visual slugger-visual" aria-hidden="true">
+              <div class="card-number">01</div>
+              <div class="stadium-lights"></div>
+              <div class="baseball">
+                <span class="stitch stitch-one"></span>
+                <span class="stitch stitch-two"></span>
+              </div>
+              <div class="speed-lines">
+                <i></i><i></i><i></i>
+              </div>
+              <span class="visual-word">SLUG</span>
+            </div>
+            <div class="card-content">
+              <div class="card-meta">
+                <span class="status available"><i></i> Play now</span>
+                <span>About 1 min</span>
+              </div>
+              <h3>Pixel Slugger</h3>
+              <p>
+                One button. Three outs. Time your swing and chase a new high
+                score.
+              </p>
+              <div class="card-footer">
+                <div class="tags">
+                  <span>Arcade</span>
+                  <span>Timing</span>
+                </div>
+                <a
+                  class="round-button"
+                  href="games/pixel-slugger/"
+                  aria-label="Play Pixel Slugger"
+                >↗</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="game-card traceback-card">
+            <div class="card-visual traceback-visual" aria-hidden="true">
+              <div class="card-number">02</div>
+              <div class="trace-grid">
+                <span></span><span></span><span class="trace-on step-3"></span><span></span>
+                <span></span><span class="trace-on step-2"></span><span></span><span></span>
+                <span class="trace-on step-1"></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+              </div>
+              <div class="trace-line line-one"></div>
+              <div class="trace-line line-two"></div>
+              <span class="visual-word">TRACE</span>
+            </div>
+            <div class="card-content">
+              <div class="card-meta">
+                <span class="status soon"><i></i> Coming soon</span>
+                <span>Daily · 60 sec</span>
+              </div>
+              <h3>Traceback</h3>
+              <p>
+                Watch the pattern, hold it in your memory, then retrace every
+                step.
+              </p>
+              <div class="card-footer">
+                <div class="tags">
+                  <span>Daily</span>
+                  <span>Memory</span>
+                </div>
+                <span class="round-button disabled" aria-hidden="true">•••</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="game-card empty-card">
+            <div class="empty-inner">
+              <span class="plus" aria-hidden="true">+</span>
+              <p>Another challenge<br />is loading…</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="manifesto" id="about">
+        <p class="eyebrow">The BitSync rulebook</p>
+        <div class="manifesto-grid">
+          <h2>Play should fit<br />into your day.</h2>
+          <div class="principles">
+            <div>
+              <span>01</span>
+              <p><strong>Learn in seconds.</strong> No instruction manual required.</p>
+            </div>
+            <div>
+              <span>02</span>
+              <p><strong>Finish in minutes.</strong> Every game respects your time.</p>
+            </div>
+            <div>
+              <span>03</span>
+              <p><strong>Come back tomorrow.</strong> Fresh challenges keep it interesting.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <a class="brand footer-brand" href="#">
+        <span class="brand-mark" aria-hidden="true">
+          <i></i><i></i><i></i><i></i>
+        </span>
+        <span>BitSync <b>Games</b></span>
+      </a>
+      <p>Made for the space between things.</p>
+      <p>© <span id="year"></span> BitSync Games</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
