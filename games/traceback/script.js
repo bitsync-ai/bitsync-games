@@ -14,6 +14,10 @@ const livesText = document.getElementById("lives");
 const progress = document.getElementById("progress");
 const resultDialog = document.getElementById("result-dialog");
 const helpDialog = document.getElementById("help-dialog");
+const menuButton = document.getElementById("menu-button");
+const menuClose = document.getElementById("menu-close");
+const gamesMenu = document.getElementById("games-menu");
+const menuBackdrop = document.getElementById("menu-backdrop");
 
 let round = 0;
 let lives = 3;
@@ -162,6 +166,29 @@ function startGame() {
   livesText.textContent = "● ● ●";
   showPath();
 }
+
+function setMenuOpen(open) {
+  gamesMenu.classList.toggle("is-open", open);
+  menuBackdrop.classList.toggle("is-open", open);
+  gamesMenu.setAttribute("aria-hidden", String(!open));
+  gamesMenu.toggleAttribute("inert", !open);
+  menuButton.setAttribute("aria-expanded", String(open));
+  document.body.classList.toggle("menu-open", open);
+  if (open) {
+    menuClose.focus();
+  } else {
+    menuButton.focus();
+  }
+}
+
+menuButton.addEventListener("click", () => setMenuOpen(true));
+menuClose.addEventListener("click", () => setMenuOpen(false));
+menuBackdrop.addEventListener("click", () => setMenuOpen(false));
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && gamesMenu.classList.contains("is-open")) {
+    setMenuOpen(false);
+  }
+});
 
 for (let index = 0; index < 16; index += 1) {
   const button = document.createElement("button");

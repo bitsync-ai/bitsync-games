@@ -1,12 +1,25 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const GAME_WIDTH = 960;
 const GAME_HEIGHT = 540;
 
 export default function Home() {
   const gameHost = useRef<HTMLDivElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.classList.toggle("menu-open", menuOpen);
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.classList.remove("menu-open");
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [menuOpen]);
 
   useEffect(() => {
     let game: import("phaser").Game | undefined;
@@ -493,29 +506,101 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="game-page">
-      <div className="arcade-shell">
-        <header className="game-header">
-          <div>
-            <p className="kicker">ONE-BUTTON ARCADE</p>
-            <h1>Pixel Slugger</h1>
-          </div>
-          <div className="control-chip" aria-label="Game controls">
-            <span className="key">SPACE</span>
-            <span>or tap to swing</span>
-          </div>
-        </header>
+    <div className="app-frame">
+      <header className="site-bar">
+        <button
+          className="nav-icon hamburger"
+          type="button"
+          aria-label="Open games menu"
+          aria-expanded={menuOpen}
+          aria-controls="games-menu"
+          onClick={() => setMenuOpen(true)}
+        >
+          <span></span><span></span><span></span>
+        </button>
+        <a className="site-brand" href="../../" aria-label="BitSync Games home">
+          <span className="site-brand-mark" aria-hidden="true">
+            <i></i><i></i><i></i><i></i>
+          </span>
+          <span>BitSync <b>Games</b></span>
+        </a>
+        <a className="nav-icon arcade-icon" href="../../" aria-label="Browse all games">
+          <i></i><i></i><i></i><i></i>
+        </a>
+      </header>
 
-        <section className="cabinet" aria-label="Pixel Slugger baseball game">
-          <div ref={gameHost} className="game-host" />
-        </section>
+      <div
+        className={`menu-backdrop ${menuOpen ? "is-open" : ""}`}
+        onClick={() => setMenuOpen(false)}
+        aria-hidden="true"
+      ></div>
+      <aside
+        className={`games-menu ${menuOpen ? "is-open" : ""}`}
+        id="games-menu"
+        aria-hidden={!menuOpen}
+        inert={!menuOpen}
+        aria-label="BitSync Games menu"
+      >
+        <div className="menu-top">
+          <button
+            className="nav-icon menu-close"
+            type="button"
+            aria-label="Close games menu"
+            onClick={() => setMenuOpen(false)}
+          >×</button>
+          <a className="site-brand" href="../../">
+            <span className="site-brand-mark" aria-hidden="true">
+              <i></i><i></i><i></i><i></i>
+            </span>
+            <span>BitSync <b>Games</b></span>
+          </a>
+          <span className="menu-spacer" aria-hidden="true"></span>
+        </div>
+        <div className="menu-feature">
+          <p className="menu-kicker">THE DAILY ARCADE</p>
+          <h2>Small games.<br />Fresh challenges.</h2>
+          <p>Pick a game and make a little space in your day.</p>
+        </div>
+        <nav className="game-links" aria-label="All games">
+          <p className="menu-section-label">Games</p>
+          <a className="game-link active" href="./" aria-current="page">
+            <span className="game-tile slugger-tile">01</span>
+            <span><strong>Pixel Slugger</strong><small>Arcade · Timing</small></span>
+            <b>→</b>
+          </a>
+          <a className="game-link" href="../traceback/">
+            <span className="game-tile traceback-tile">02</span>
+            <span><strong>Traceback</strong><small>Daily · Memory</small></span>
+            <b>→</b>
+          </a>
+          <a className="menu-home-link" href="../../">Browse the full arcade <span>↗</span></a>
+        </nav>
+      </aside>
 
-        <footer className="game-footer">
-          <span>Time the pitch.</span>
-          <span>Protect the plate.</span>
-          <span>Three outs to set your score.</span>
-        </footer>
-      </div>
-    </main>
+      <main className="game-page">
+        <div className="arcade-shell">
+          <div className="game-header">
+            <div>
+              <p className="kicker">ONE-BUTTON ARCADE</p>
+              <h1>Pixel Slugger</h1>
+            </div>
+            <div className="control-chip" aria-label="Game controls">
+              <span className="key">SPACE</span>
+              <span>or tap to swing</span>
+            </div>
+          </div>
+
+          <section className="cabinet" aria-label="Pixel Slugger baseball game">
+            <div ref={gameHost} className="game-host" />
+          </section>
+
+          <footer className="game-footer">
+            <span>Time the pitch.</span>
+            <span>Protect the plate.</span>
+            <span>Three outs to set your score.</span>
+          </footer>
+        </div>
+      </main>
+    </div>
   );
 }
