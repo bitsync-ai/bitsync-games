@@ -113,6 +113,7 @@ h1 span { color: var(--lime); }
 }
 .primary { background: var(--lime); color: var(--ink); }
 .primary:hover { background: var(--cyan); }
+.primary:disabled { background: #48516a; color: var(--muted); cursor: not-allowed; }
 .secondary { background: transparent; color: var(--paper); }
 
 .stats { display: grid; grid-template-columns: repeat(4,1fr); margin-top: 35px; }
