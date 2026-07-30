@@ -113,6 +113,7 @@ h1 span { color: var(--lime); }
 }
 .primary { background: var(--lime); color: var(--ink); }
 .primary:hover { background: var(--cyan); }
+.primary:disabled { background: #48516a; color: var(--muted); cursor: not-allowed; }
 .secondary { background: transparent; color: var(--paper); }
 
 .stats { display: grid; grid-template-columns: repeat(4,1fr); margin-top: 35px; }
@@ -382,7 +383,6 @@ body.menu-open { overflow: hidden; }
   font: 900 11px "DM Mono", monospace;
   box-shadow: 4px 4px 0 rgba(0,0,0,.3);
 }
-.slugger-tile { background: var(--orange); }
 .traceback-tile { background: var(--lime); }
 .menu-home-link {
   margin-top: 25px;

@@ -401,13 +401,15 @@ h1 em {
   overflow: hidden;
 }
 
-.slugger-visual {
-  background:
-    linear-gradient(170deg, transparent 65%, rgba(255, 255, 255, 0.12) 65%),
-    var(--orange);
+.traceback-card {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 .traceback-visual {
+  height: 100%;
+  min-height: 350px;
   background: var(--purple);
 }
 
@@ -430,66 +432,6 @@ h1 em {
   letter-spacing: -0.09em;
 }
 
-.baseball {
-  position: absolute;
-  top: 50%;
-  left: 52%;
-  width: 126px;
-  height: 126px;
-  border-radius: 50%;
-  background: var(--paper);
-  box-shadow: 12px 14px 0 rgba(10, 16, 34, 0.2);
-  transform: translate(-50%, -50%);
-}
-
-.baseball::before,
-.baseball::after {
-  content: "";
-  position: absolute;
-  top: 23px;
-  width: 28px;
-  height: 80px;
-  border: 3px dashed var(--orange);
-  border-top-color: transparent;
-  border-bottom-color: transparent;
-  border-radius: 50%;
-}
-
-.baseball::before {
-  left: 13px;
-}
-
-.baseball::after {
-  right: 13px;
-}
-
-.stadium-lights {
-  position: absolute;
-  top: 38px;
-  right: 45px;
-  width: 62px;
-  height: 36px;
-  background:
-    radial-gradient(circle, var(--paper) 0 3px, transparent 4px) 0 0 / 15px 15px;
-  transform: rotate(8deg);
-}
-
-.speed-lines {
-  position: absolute;
-  top: 40%;
-  left: 8%;
-}
-
-.speed-lines i {
-  display: block;
-  height: 4px;
-  margin: 12px 0;
-  background: var(--ink);
-}
-
-.speed-lines i:nth-child(1) { width: 75px; }
-.speed-lines i:nth-child(2) { width: 115px; }
-.speed-lines i:nth-child(3) { width: 55px; }
 
 .trace-grid {
   position: absolute;
@@ -760,6 +702,15 @@ footer p:last-child {
   .game-grid,
   .manifesto-grid {
     grid-template-columns: 1fr;
+  }
+
+  .traceback-card {
+    grid-column: auto;
+    grid-template-columns: 1fr;
+  }
+
+  .traceback-visual {
+    min-height: 300px;
   }
 
   .empty-card {

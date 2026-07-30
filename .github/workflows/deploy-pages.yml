@@ -23,26 +23,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: games/pixel-slugger/package-lock.json
-
-      - name: Install Pixel Slugger
-        working-directory: games/pixel-slugger
-        run: npm ci
-
-      - name: Build Pixel Slugger
-        working-directory: games/pixel-slugger
-        run: npm run build
-
       - name: Assemble site
         run: |
-          mkdir -p _site/games/pixel-slugger _site/games/traceback
+          mkdir -p _site/games/traceback
           cp index.html styles.css script.js .nojekyll _site/
-          cp -R games/pixel-slugger/out/. _site/games/pixel-slugger/
           cp -R games/traceback/. _site/games/traceback/
 
       - name: Configure Pages

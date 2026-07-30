@@ -5,6 +5,7 @@ const utcToday = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.get
 const puzzleNumber = Math.floor((utcToday - EPOCH) / DAY) + 1;
 const dayKey = new Date(utcToday).toISOString().slice(0, 10);
 const lengths = [4, 6, 8];
+const attemptKey = `traceback:attempt:${dayKey}`;
 
 const grid = document.getElementById("grid");
 const startButton = document.getElementById("start-button");
@@ -25,6 +26,30 @@ let position = 0;
 let accepting = false;
 let paths = [];
 let roundMarks = [];
+
+function getCookie(name) {
+  const prefix = `${name}=`;
+  return document.cookie
+    .split("; ")
+    .find((item) => item.startsWith(prefix))
+    ?.slice(prefix.length);
+}
+
+function setDailyCookie() {
+  const tomorrow = new Date(utcToday + DAY);
+  document.cookie = `traceback_day=${dayKey}; expires=${tomorrow.toUTCString()}; path=/; SameSite=Lax`;
+}
+
+function saveAttempt(state = "active") {
+  localStorage.setItem(attemptKey, JSON.stringify({
+    date: dayKey,
+    state,
+    round,
+    lives,
+    marks: roundMarks,
+  }));
+  setDailyCookie();
+}
 
 function seededRandom(seed) {
   let state = seed >>> 0;
@@ -83,6 +108,7 @@ async function chooseCell(index) {
     if (position === paths[round].length) {
       accepting = false;
       roundMarks.push("🟩");
+      saveAttempt();
       if (round === 2) {
         finish(true);
       } else {
@@ -106,6 +132,7 @@ async function chooseCell(index) {
       finish(false);
     } else {
       roundMarks.push("🟨");
+      saveAttempt();
       statusText.textContent = "Signal lost. Watch again.";
       await wait(700);
       showPath();
@@ -126,6 +153,7 @@ function renderStats(stats = loadStats()) {
 
 function finish(won) {
   accepting = false;
+  saveAttempt("complete");
   const stats = loadStats();
   const previous = localStorage.getItem("traceback:last-played");
   if (previous !== dayKey) {
@@ -140,7 +168,7 @@ function finish(won) {
     }
     localStorage.setItem("traceback:stats", JSON.stringify(stats));
     localStorage.setItem("traceback:last-played", dayKey);
-    localStorage.setItem("traceback:result", JSON.stringify({ won, lives, marks: roundMarks }));
+    localStorage.setItem("traceback:result", JSON.stringify({ date: dayKey, won, lives, marks: roundMarks }));
   }
   renderStats(stats);
   showResult(won);
@@ -162,6 +190,7 @@ function startGame() {
   position = 0;
   roundMarks = [];
   paths = buildPaths();
+  saveAttempt();
   roundText.textContent = "1";
   livesText.textContent = "● ● ●";
   showPath();
@@ -212,13 +241,26 @@ document.getElementById("share-button").addEventListener("click", async () => {
   }
 });
 const savedDate = localStorage.getItem("traceback:last-played");
-const savedResult = localStorage.getItem("traceback:result");
-if (savedDate === dayKey && savedResult) {
-  const result = JSON.parse(savedResult);
+const savedResult = JSON.parse(localStorage.getItem("traceback:result") || "null");
+const savedAttempt = JSON.parse(localStorage.getItem(attemptKey) || "null");
+const cookieLocked = getCookie("traceback_day") === dayKey;
+
+if (savedAttempt?.state === "active") {
+  round = savedAttempt.round || 0;
+  lives = savedAttempt.lives ?? 0;
+  roundMarks = [...(savedAttempt.marks || []), "🟥"];
+  lives = 0;
+  finish(false);
+} else if (savedDate === dayKey && (savedResult?.date ?? savedDate) === dayKey) {
+  const result = savedResult;
   roundMarks = result.marks;
   lives = result.lives;
   startButton.textContent = "View today’s result";
   startButton.addEventListener("click", () => showResult(result.won));
+} else if (cookieLocked) {
+  startButton.textContent = "Played today";
+  startButton.disabled = true;
+  statusText.textContent = "Today’s attempt was already used on this browser.";
 } else {
   startButton.addEventListener("click", startGame);
 }
