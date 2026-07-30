@@ -26,6 +26,7 @@ let position = 0;
 let accepting = false;
 let paths = [];
 let roundMarks = [];
+let latestWon = false;
 
 function getCookie(name) {
   const prefix = `${name}=`;
@@ -175,13 +176,16 @@ function finish(won) {
 }
 
 function showResult(won) {
+  latestWon = won;
   document.getElementById("result-title").textContent = won ? "Signal restored." : "Signal lost.";
   document.getElementById("result-copy").textContent = won
     ? `You cleared all three paths with ${lives} ${lives === 1 ? "life" : "lives"} remaining.`
     : "Today’s path got away. A new signal arrives tomorrow.";
-  document.getElementById("share-result").textContent =
-    `Traceback #${puzzleNumber} ${won ? `${lives}/3` : "X/3"}\n${roundMarks.join("")}\nhttps://bitsync-ai.github.io/bitsync-games/games/traceback/`;
   resultDialog.showModal();
+}
+
+function buildShareText() {
+  return `Traceback #${puzzleNumber} ${latestWon ? `${lives}/3` : "X/3"}\n${roundMarks.join("")}\nhttps://bitsync-ai.github.io/bitsync-games/games/traceback/`;
 }
 
 function startGame() {
@@ -232,7 +236,7 @@ document.getElementById("puzzle-number").textContent = `#${String(puzzleNumber).
 document.getElementById("help-button").addEventListener("click", () => helpDialog.showModal());
 document.querySelectorAll("[data-close]").forEach((button) => button.addEventListener("click", () => button.closest("dialog").close()));
 document.getElementById("share-button").addEventListener("click", async () => {
-  const text = document.getElementById("share-result").textContent;
+  const text = buildShareText();
   if (navigator.share) {
     await navigator.share({ text });
   } else {
