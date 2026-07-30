@@ -110,9 +110,11 @@ nav a:hover,
   letter-spacing: 0.08em;
 }
 
-.header-cta span {
-  color: var(--lime);
+.header-cta .ui-icon {
+  display: inline-block;
   margin-left: 7px;
+  color: var(--lime);
+  vertical-align: -0.15em;
 }
 
 .hero {
@@ -187,6 +189,17 @@ h1 em {
 .primary-button:hover {
   background: var(--lime);
   color: var(--ink);
+}
+
+.ui-icon {
+  width: 1em;
+  height: 1em;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
 }
 
 .button-icon {
